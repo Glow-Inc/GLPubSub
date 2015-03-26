@@ -1,5 +1,7 @@
 # GLPubSub
 
+[README in Chinese (中文说明)](#glpubsub-chinese)
+
 GLPubSub is a wrapper of `NSNotificationCenter` to make pub sub easier. It's a category on `NSObject`, so it can be called on any subclass of `NSObject`.
 
 ## Installation
@@ -155,6 +157,8 @@ GLPubSub is available under the MIT license. See the LICENSE file for more info.
 ---
 
 # GLPubSub (Chinese)
+
+[README in English](#glpubsub)
 
 GLPubSub 是 `NSNotificationCenter` 的封装，目标是简化 iOS 开发中的发布订阅模式。因为是 `NSObject` 的 Category，所以可以在任意 `NSObject` 的子类上使用。
 
