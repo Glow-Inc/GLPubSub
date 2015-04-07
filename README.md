@@ -35,7 +35,7 @@ GLPubSub is built on top of [`-addObserverForName:object:queue:usingBlock:`](htt
 
 The PubSub queue is `nil` by default, which means event callbacks will be triggered on the queue where the notification is posted. You can explicitly set the queue to `[NSOperationQueue maniQueue]` to make all callbacks triggered on main thread.
 
-```
+```objective-c
 [NSObject setPubSubQueue:[NSOperationQueue mainQueue]];
 ```
 
@@ -43,19 +43,19 @@ The PubSub queue is `nil` by default, which means event callbacks will be trigge
 
 Most of the time, we use `self` as subscriber:
 
-```
+```objective-c
 [self subscribe:@"YourEventName" selector:@selector(yourEventHandler)];
 ```
 
 You can subscribe to event published by some specified object:
 
-```
+```objective-c
 [self subscribe:@"YourEventName" obj:somePublisher selector:@selector(yourEventHandler)];
 ```
 
 If you want your handler only be triggered once, you can use:
 
-```
+```objective-c
 [self subscribeOnce:@"YourEventName" selector:@selector(yourEventHandler)];
 ```
 
@@ -63,7 +63,7 @@ Then after triggered, the event will be automatically unsubscribed.
 
 Your selector can defined accepting one parameter, if so, a `GLEvent` object representing the event will be passed into your selector.
 
-```
+```objective-c
 @interface GLEvent : NSObject
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, retain) id obj;
@@ -78,13 +78,13 @@ All the methods are similar to those above, only with selector replaced by handl
 
 `GLEventHandler` is defined as:
 
-```
+```objective-c
 typedef void (^GLEventHandler)(GLEvent *event);
 ```
 
 So you can subscribe to some event using syntax like:
 
-```
+```objective-c
 __weak __typeof__(self) weakSelf = self;
 [self subscribe:UIApplicationDidEnterBackgroundNotification handler:^(GLEvent *event) {
     __strong __typeof__(weakSelf) strongSelf = weakSelf;
@@ -94,7 +94,7 @@ __weak __typeof__(self) weakSelf = self;
 
 Weakifying self here is important to avoid retain cycle. Corresponding to methods with selector, there're 4 methods can be used with handler block:
 
-```
+```objective-c
 - (id)subscribe:(NSString *)eventName handler:(GLEventHandler)handler;
 - (id)subscribe:(NSString *)eventName obj:(id)obj handler:(GLEventHandler)handler;
 - (id)subscribeOnce:(NSString *)eventName handler:(GLEventHandler)handler;
@@ -105,19 +105,19 @@ Weakifying self here is important to avoid retain cycle. Corresponding to method
 
 Unsubscribe one event:
 
-```
+```objective-c
 - (void)unsubscribe:(NSString *)eventName;
 ```
 
 Unsubscribe all subscribed events:
 
-```
+```objective-c
 - (void)unsubscribeAll;
 ```
 
 Although the observers will be deallocated when the instance deallocate, it's still recommended to unsubscribe manually, for example in `-dealloc` method, or sometimes in `-viewDidDisappear` method, according to your requirement.
 
-```
+```objective-c
 - (void)dealloc
 {
     [self unsubscribeAll];
@@ -128,13 +128,13 @@ Although the observers will be deallocated when the instance deallocate, it's st
 
 You can simply publish an event without additional data:
 
-```
+```objective-c
 [self publish:@"YourEventName"];
 ```
 
 or with additional data, most of the time a `NSDictionary` object in practice:
 
-```
+```objective-c
 [self publish:@"YourEventName" data:@{@"key": value}]
 ```
 
@@ -142,7 +142,7 @@ or with additional data, most of the time a `NSDictionary` object in practice:
 
 Since all observers are retained by `self`, there will be retain cycle if your block retains `self`. So you have to weakify self as mentioned above. We highly recommend doing weakify/strongify with [EXTScope in libextobjc](https://github.com/jspahrsummers/libextobjc/blob/master/extobjc/EXTScope.h), with the library, your code would look like:
 
-```
+```objective-c
 @weakify(self);
 [self subscribe:UIApplicationDidEnterBackgroundNotification handler:^(GLEvent *event) {
     @strongify(self);
@@ -193,7 +193,7 @@ GLPubSub 主要基于 `NSNotificationCenter` 的 [`-addObserverForName:object:qu
 
 默认传入的 `queue` 为 `nil`，这意味着所有事件会在发布通知的线程中被执行。你可以手动设置为 `[NSOperationQueue maniQueue]` 使得所有事件在主线程被触发：
 
-```
+```objective-c
 [NSObject setPubSubQueue:[NSOperationQueue mainQueue]];
 ```
 
@@ -201,19 +201,19 @@ GLPubSub 主要基于 `NSNotificationCenter` 的 [`-addObserverForName:object:qu
 
 大部分时候，我们用 `self` 作为订阅者：
 
-```
+```objective-c
 [self subscribe:@"YourEventName" selector:@selector(yourEventHandler)];
 ```
 
 你也可以指定事件的发布者：
 
-```
+```objective-c
 [self subscribe:@"YourEventName" obj:somePublisher selector:@selector(yourEventHandler)];
 ```
 
 如果你希望你的方法只触发一次，你可以用：
 
-```
+```objective-c
 [self subscribeOnce:@"YourEventName" selector:@selector(yourEventHandler)];
 ```
 
@@ -221,7 +221,7 @@ GLPubSub 主要基于 `NSNotificationCenter` 的 [`-addObserverForName:object:qu
 
 你的方法可以接受一个 `GLEvent` 参数，该参数包含了被触发事件的相关信息。
 
-```
+```objective-c
 @interface GLEvent : NSObject
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, retain) id obj;
@@ -236,13 +236,13 @@ GLPubSub 主要基于 `NSNotificationCenter` 的 [`-addObserverForName:object:qu
 
 `GLEventHandler` 定义如下：
 
-```
+```objective-c
 typedef void (^GLEventHandler)(GLEvent *event);
 ```
 
 所以你可以如下用 block 订阅一个事件：
 
-```
+```objective-c
 __weak __typeof__(self) weakSelf = self;
 [self subscribe:UIApplicationDidEnterBackgroundNotification handler:^(GLEvent *event) {
     __strong __typeof__(weakSelf) strongSelf = weakSelf;
@@ -252,7 +252,7 @@ __weak __typeof__(self) weakSelf = self;
 
 这里的 weak 化是为了避免循环引用。对应于前面 selector 的方法，用 block 也有 4 种调用方法：
 
-```
+```objective-c
 - (id)subscribe:(NSString *)eventName handler:(GLEventHandler)handler;
 - (id)subscribe:(NSString *)eventName obj:(id)obj handler:(GLEventHandler)handler;
 - (id)subscribeOnce:(NSString *)eventName handler:(GLEventHandler)handler;
@@ -263,19 +263,19 @@ __weak __typeof__(self) weakSelf = self;
 
 取消订阅某个事件：
 
-```
+```objective-c
 - (void)unsubscribe:(NSString *)eventName;
 ```
 
 取消订阅所有事件：
 
-```
+```objective-c
 - (void)unsubscribeAll;
 ```
 
 虽然当实例被销毁时，存在 associated object 中的观察者也都会被销毁，但还是建议手动取消订阅，如根据不同需求，在 `-dealloc` 或 `-viewDidDisappear` 方法中取消订阅。
 
-```
+```objective-c
 - (void)dealloc
 {
     [self unsubscribeAll];
@@ -286,20 +286,20 @@ __weak __typeof__(self) weakSelf = self;
 
 你可以简单地发布一个事件：
 
-```
+```objective-c
 [self publish:@"YourEventName"];
 ```
 
 也可以附带一些数据，很多时候我们会传入一个 `NSDictionary` 来附带更多结构化的数据：
 
-```
+```objective-c
 [self publish:@"YourEventName" data:@{@"key": value}]
 ```
 
 ## 循环引用
 
 因为所有生成的观察者都会被 `self` 引用，所以当你的 block 引用 `self` 的时候就会形成循环引用导致实例无法被释放，所以你必须 weakify `self`。强烈推荐用 [libextobjc 中的 EXTScope](https://github.com/jspahrsummers/libextobjc/blob/master/extobjc/EXTScope.h) 来做 weakify/strongify：
-```
+```objective-c
 @weakify(self);
 [self subscribe:UIApplicationDidEnterBackgroundNotification handler:^(GLEvent *event) {
     @strongify(self);
