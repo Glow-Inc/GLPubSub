@@ -94,7 +94,6 @@ static char kGLPubSubSubscriptionsKey;
 }
 
 - (id)subscribe:(NSString *)eventName obj:(id)obj handler:(GLEventHandler)handler {
-    [self unsubscribe:eventName];
     id observer =  [[NSNotificationCenter defaultCenter] addObserverForName:eventName object:obj queue:_pubSubQueue usingBlock:^(NSNotification *note) {
         GLEvent *event = [[GLEvent alloc] initWithName:eventName obj:note.object data:[note.userInfo objectForKey:kGLPubSubDataKey]];
         handler(event);
