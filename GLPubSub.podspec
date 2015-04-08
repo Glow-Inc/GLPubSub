@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.social_media_url   = "https://github.com/Glow-Inc"
 
   s.ios.platform = :ios, "5.0"
-  s.osx.platform = :osx, "10.6"
+  s.osx.platform = :osx, "10.7"
 
   s.source       = { :git => "https://github.com/Glow-Inc/GLPubSub.git", :tag => s.version }
   s.source_files  = "GLPubSub/*.{h,m}"
